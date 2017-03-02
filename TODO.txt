@@ -1,0 +1,28 @@
+TODO
+
+STEP3:
+ 1) Create an Interrupt Enabled Register (IE) so we can keep track of whether or not interrupts are currently enabled or disabled.
+
+ 2) Continue asserting to microcontroller until processor responds with IntAck to handle interupt. Once INTA is recieved device should drive device index onto tobus. 0x1 is device index
+
+ 4) Hardware support for $k0 reg. use reg sel bits that main rom outputs to select $k0
+
+STEP4:
+ 2) a. modify microtronller to assert:
+	LdEnInt & EnInt
+    b. IntAck to send int acknoledgement to device
+ 3) Extend ROM size to match the previous step
+ 4) Add 4th ROM from appendix to handle onINT
+ 5) Modify FETCH so that interupts are checked for
+    a. check if interupt is raised
+    b. if not continue with FETCH
+    c. if yes
+	* save curr PC to $k0
+	* disable ints
+	* assert IntAck. Take device index from bus & index into IVT at 0x01 and get new PC value. Load this new PC val into PC.
+ 6) Implement imcrocode for supporting interupts 
+    (a) EI sets the IE register to 1. 
+    (b) DI sets the IE register to 0.
+    (c) RETI loads $k0 into the PC, and enables interrupts.
+STEP 5:
+ AN ASSTON YOU GOON FOOL	
