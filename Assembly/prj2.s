@@ -41,7 +41,9 @@ main:   lea $sp, stack                 !initialize the stack pointer
         lw $sp, 0($sp)                  !finish initialization          
                 
                                         ! Install timer interrupt handler into vector table
-        noop                            ! FIX ME
+        lea $t0, vector0                ! FIXED.
+        lea $t1, ti_inthandler
+        sw $t1, 1($t0) 
 
         ei                              ! Don't forget to enable interrupts...
 
@@ -97,11 +99,34 @@ AGAIN:  add $v0,$v0, $a0                ! multiply loop
 DONE:   jalr $ra, $zero
 
 ti_inthandler:
-    noop        ! FIXME
+    addi $sp, $sp, -1         !Allocate space for $k0
+    sw $k0, 0($sp)             !save $k0
+    
+    EI                        !enable interrupts
+    
+    addi $sp, $sp, -1         !Allocate space for $t0
+    sw $t0, ($t0)             !save $t1
+
+    addi $sp, $sp, -1         !Allocate space for $t1
+    sw $t1, ($t1)             !save $t1
+
+    addi $sp, $sp, -1         !Allocate space for $t2
+    sw $t2, ($t2)             !save $t2
+
+! excecute device code
+!restore processes registers
+    DI !disable interupts
+!restore $k0
+    RETI !  return from interupt                 
+
+HOURS:
+
+SECONDS:
+
+MINUTES:
 
 
-
-
+END:
 
 
 
